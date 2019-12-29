@@ -418,3 +418,231 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
+トレイトの継承で有用な機能を追加する
+
+- strictをprintln!で{}で表示するには`Display`を実装する必要がある
+- 基本型は全部Displayを実装してるので表示できた
+- Debugを実装すれば`{:?}`で表示できる
+
+- Debugを実装するにはトレイトを呼び出す`#[derive(Debug)]`
+- `{:#?}`とすると改行された形で表示される
+
+
+```
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { width: 30, height: 50 };
+
+    // rect1は{}です
+    println!("rect1 is {}", rect1);
+}
+```
+
+### メソッド記法
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+```
+メソッドの実装はimpl句でstructと同名の指定する。
+
+メソッドの第一引数が`&self`
+
+# "6,.Enumとパターンマッチング"
+### Enum
+```rust
+enum IpAddrKind {
+    V4,
+    V6,
+}
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+```
+
+rustのenumは、もはや列挙型の範疇を超えてる。
+```
+enum IpAddr {
+    V4(String),
+    V6(String),
+}
+
+let home = IpAddr::V4(String::from("127.0.0.1"));
+let loopback = IpAddr::V6(String::from("::1"));
+```
+```
+enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+let loopback = IpAddr::V6(String::from("::1"));
+```
+
+enumなのに値を代入できるー！ 便利なのはわかるけど、 Enumの概念がわけわからなくなってきた。
+これを活用すると他の言語と全然違う実装になりそう。
+
+enumにもimplでメソッド生やせる
+
+####  Optional
+
+nullの開発者はnullのことを「10億ドルの失敗」と言ってる話。
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+```rust
+
+let some_number = Some(5);
+let some_string = Some("a string");
+
+let absent_number: Option<i32> = None;
+```
+使う時はこうする
+
+まだあんまりピンときてない。
+
+## matchフロー制御演算子
+
+```
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+fn value_in_cents(coin: Coin) -> u32 {
+    match coin {
+        Coin::Penny => {
+            println!("Lucky penny!");
+            1
+        },
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter => 25,
+    }
+}
+```
+
+```rust
+
+#[derive(Debug)] // すぐに州を点検できるように
+enum UsState {
+    Alabama,
+    Alaska,
+    // ... などなど
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),// わあこうやってEnumがネストするのか 
+}
+
+fn value_in_cents(coin: Coin) -> u32 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
+            // 引数に入ってくる
+            println!("State quarter from {:?}!", state);
+            25
+        },
+    }
+}
+```
+
+### Option<T>とのマッチ
+  
+
+```rust
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(i) => Some(i + 1),
+    }
+}
+
+let five = Some(5);
+let six = plus_one(five);
+let none = plus_one(None);
+```
+おお、なんかわかってきた。繋がってきた。nullableな変数ですよということを静的にずっと引き回していける感じか。
+Optionだから処理する前に判定することを矯正できるのね。
+
+```
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        Some(i) => Some(i + 1),
+        // Error
+    }
+}
+```
+matchはすべてのEnumのパターンを網羅しないとエラーになる
+
+### _というプレースホルダー
+
+全部網羅するのは大変。_を使って、ifと同じようにelseみたいなことができる
+```rust
+match some_u8_value {
+    1 => println!("one"),
+    3 => println!("three"),
+    5 => println!("five"),
+    7 => println!("seven"),
+    _ => (),
+}
+```
+
+## if let
+
+```rust
+let some_u8_value = Some(0u8);
+match some_u8_value {
+    Some(3) => println!("three"),
+    _ => (),
+}
+
+と以下は等価
+if let Some(3) = some_u8_value {
+    println!("three");
+}
+```
+
+マッチしたい値が一個の時はif let　でええんやね。
+if letってあんまり直感的でない命名な気もするけど。
+
+
+elseもかけるのか。これはmutchじゃなくてif分だと思えばいいのかな。
+```rust
+
+let mut count = 0;
+if let Coin::Quarter(state) = coin {
+    println!("State quarter from {:?}!", state);
+} else {
+    count += 1;
+}
+```
+
+# "7.モジュールを使用してコードを体系化し、再利用する"
+
