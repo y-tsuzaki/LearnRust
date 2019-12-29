@@ -396,3 +396,25 @@ let s = "Hello, world!";
 実態はヒープにある
 
 
+# 構造体を定義し、インスタンス化する
+```rust
+struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+```
+
+構造体のカラム名と一緒なら省略できる
+```rust
+fn build_user(email: String, username: String) -> User {
+    User {
+        email,
+        username,
+        active: true,
+        sign_in_count: 1,
+    }
+}
+```
+
