@@ -9,6 +9,8 @@ https://doc.rust-jp.rs/the-rust-programming-language-ja/1.6/book/README.html
 このドキュメントが一番新しいっぽい
 https://doc.rust-jp.rs/book/second-edition/
 
+これをやるぞ
+
 Rust 2018という言語バージョンがあり、旧Rustから破壊的な更新があるみたいだけど、日本語ドキュメントがないのでスルーする。
 基本文法は同じだと思うので。この辺は詰まってから考えよう。
 
@@ -644,5 +646,290 @@ if let Coin::Quarter(state) = coin {
 }
 ```
 
-# "7.モジュールを使用してコードを体系化し、再利用する"
+# "7.モジュール"
+
+- `cargo new communicator --lib`でモジュールを作る
+
+内部モジュール
+
+```rust
+mod network {
+    fn connect() {
+    }
+
+    mod client {
+        fn connect() {
+        }
+    }
+}
+```
+
+ファイルを外に出すには、モジュール名でファイルを作って中身を書く。modブロックはいらない。
+
+ファイル名: src/lib.rs
+```rust
+mod client;
+```
+ ファイル名: src/client.rs
+```rust
+fn connect() {
+}
+```
+
+### modとファイルシステム
+
+サブモジュールは、サブモジュール名.rsと命名する
+サブモジュールにサブモジュールがある場合は
+
+```
+sub_module/mod.rs
+sub_module/sub_sub_module.rs
+```
+とする
+
+### pubで公開するか制御する
+
+```
+pub mod hogehoge;
+```
+として
+```
+pub fn hoge(){}
+```
+となれば外部からアクセスできる
+
+アクセスするときは`extern crate module_name;`で読み込んで
+`module_name::sub_module_name::function_name();`で実行
+
+ただし、同一クレート（cargo newでできたフォルダ）以外からアクセスする方法はまだわからない
+
+
+# 一般的なコレクション
+
+## ベクタ型
+
+同じ型のリストみたいなもん。単方向リストか？
+
+#### 宣言する
+```rust
+let v: Vec<i32> = Vec::new();
+```
+
+#### 代入する
+```rust
+let v = vec![1, 2, 3];
+```
+
+#### データを追加する
+```rust
+let mut v = Vec::new();
+
+v.push(5);
+v.push(6);
+v.push(7);
+```
+
+ベクタがドロップすると、ベクタの中のあたいもドロップする
+
+```rust
+{
+    let v = vec![1, 2, 3, 4];
+
+    // vで作業をする
+
+} // <- vはここでスコープを抜け、解放される
+```
+
+#### ベクタの要素を読む
+
+```
+
+let v = vec![1, 2, 3, 4, 5];
+
+let third: &i32 = &v[2];
+let third: Option<&i32> = v.get(2);
+```
+[]でもいけるし、get()でもいける
+
+[]だとRuntimeExceptionだけど
+get()だとOption<＆T>だから安全だな
+
+#### 参照されてると変更できない
+`同一スコープ上では、可変と不変な参照を同時には存在させられないというルール`のため
+
+```rust
+let mut v = vec![1, 2, 3, 4, 5];
+
+let first = &v[0];
+
+v.push(6);
+```
+
+0番目しか借用してないのにpushできないのは、pushするとメモリの再配置が起こるかもしれないから。
+
+
+#### Enumを使えば複数の型をvectorに入れられる
+```rust
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("blue")),
+        SpreadsheetCell::Float(10.12),
+    ];
+```
+
+なぜならEnumはどんな方になり得るかコンパイラが知ってるから。
+
+
+## 文字列型
+
+```rust
+let mut s = String::new();
+```
+
+```rust
+let data = "initial contents";
+
+let s = data.to_string();
+
+// the method also works on a literal directly:
+let s = "initial contents".to_string();
+```
+
+文字リテラルと文字列は違うんだね
+
+### 連結
+
+```rust
+
+let s1 = String::from("Hello, ");
+let s2 = String::from("world!");
+let s3 = s1 + &s2; // s1はムーブされ、もう使用できないことに注意
+```
+
++は`fn add(self, s: &str) -> String {`らしいが、あとで詳しく出てくるだろうからスルー。
+
+```rust
+
+let s1 = String::from("tic");
+let s2 = String::from("tac");
+let s3 = String::from("toe");
+
+let s = format!("{}-{}-{}", s1, s2, s3);
+```
+format!はprintln!とほとんど同じ。formatのほうは文字列を返す.
+
+
+### 添字でアクセス
+
+マルチバイト文字なので添字でアクセするのはよくない（バグる）
+
+chars()で取るのが最適とのこと
+```rust
+for c in "नमस्ते".chars() {
+    println!("{}", c);
+}
+```
+
+## ハッシュマップ
+
+```rust
+
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Yellow"), 50);
+```
+
+
+
+```
+
+use std::collections::HashMap;
+
+let teams  = vec![String::from("Blue"), String::from("Yellow")];
+let initial_scores = vec![10, 50];
+
+let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+```
+HashMap<_, _> をつけなきゃいけない理由はよくわからない
+collect()の返り値の型はHashMapじゃないのか？
+何がくるかわからないのにHashMapにしていいの？
+_ってなに？ 
+
+### ハッシュマップの値にアクセスする
+
+```rust
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Yellow"), 50);
+
+let team_name = String::from("Blue");
+let score = scores.get(&team_name);
+```
+getで取得する。 返り値はOption<&V>
+
+
+```
+
+for (key, value) in &scores {
+    println!("{}: {}", key, value);
+}
+```
+forで回す
+
+
+```rust
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Blue"), 25);
+```
+
+なかったらいれる
+```rust
+scores.entry(String::from("Blue")).or_insert(50);
+```
+
+古い値に基づいて値を更新する
+```rust
+
+use std::collections::HashMap;
+
+let text = "hello world wonderful world";
+
+let mut map = HashMap::new();
+
+for word in text.split_whitespace() {
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
+}
+
+println!("{:?}", map);
+```
+これはちょっとむずいな。 or_insert()はキーに対する可変参照(&mut V)を返すからこう書ける。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
