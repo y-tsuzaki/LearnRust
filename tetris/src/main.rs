@@ -80,7 +80,8 @@ const TetriminoBlockJ: [[bool; 4]; 4] = [
     [false, false, false, false],
 ];
 
-type FieldBlocks = [[bool; 10]; 20];
+const FieldTopBuffer: usize = 5;
+type FieldBlocks = [[bool; 10]; 20 + FieldTopBuffer]; // 表示領域は 10 x 20、 ゲームオーバー時に上に溢れることを考慮して高さにバッファを増やしてる 
 type Blocks = [[bool; 4]; 4];
 
 type Pos = (i16, i16);
@@ -319,7 +320,7 @@ fn main() {
     let fall_limit_time = Duration::from_millis(200);
 
     let mut stage = Stage {
-        blocks: [[false; 10]; 20],
+        blocks: [[false; 10]; 20 + FieldTopBuffer],
     };
 
     let mut dummy_rand : i32= 0;
@@ -414,24 +415,6 @@ fn main() {
     }
 }
 
-// fn print_events() -> crossterm::Result<()> {
-//     loop {
-//         // `poll()` waits for an `Event` for a given time period
-//         if poll(Duration::from_millis(500))? {
-//             // It's guaranteed that the `read()` won't block when the `poll()`
-//             // function returns `true`
-//             match read()? {
-//                 Event::Key(event) => println!("{:?}", event),
-//                 Event::Mouse(event) => println!("{:?}", event),
-//                 Event::Resize(width, height) => println!("New size {}x{}", width, height),
-//             }
-//         } else {
-//             // Timeout expired and no `Event` is available
-//         }
-//     }
-//     Ok(())
-// }
-
 fn init(terminal: &mut Terminal) {
     terminal.clear();
 
@@ -454,7 +437,7 @@ fn render_wall(terminal: &mut Terminal) {
 
 fn render_field(terminal: &mut Terminal, field: &FieldBlocks) {
 
-    for y in 0..field.len() {
+    for y in FieldTopBuffer..field.len() {
         for x in 0..field[0].len() {
             if (field[y as usize][x as usize]) {
                 terminal.mvaddstr(
