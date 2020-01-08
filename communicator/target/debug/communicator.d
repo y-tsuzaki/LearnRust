@@ -1,0 +1,1 @@
+/Users/y-tsuzaki/study/LearnRust/communicator/target/debug/communicator: /Users/y-tsuzaki/study/LearnRust/communicator/src/client.rs /Users/y-tsuzaki/study/LearnRust/communicator/src/lib.rs /Users/y-tsuzaki/study/LearnRust/communicator/src/main.rs /Users/y-tsuzaki/study/LearnRust/communicator/src/network/mod.rs /Users/y-tsuzaki/study/LearnRust/communicator/src/network/server.rs

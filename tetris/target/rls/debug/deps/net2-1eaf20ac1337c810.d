@@ -1,0 +1,13 @@
+/Users/y-tsuzaki/study/LearnRust/crossterm_test/target/rls/debug/deps/net2-1eaf20ac1337c810.rmeta: /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/lib.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/tcp.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/udp.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/socket.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/ext.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/utils.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/mod.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/impls.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/unix.rs
+
+/Users/y-tsuzaki/study/LearnRust/crossterm_test/target/rls/debug/deps/net2-1eaf20ac1337c810.d: /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/lib.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/tcp.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/udp.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/socket.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/ext.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/utils.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/mod.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/impls.rs /Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/unix.rs
+
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/lib.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/tcp.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/udp.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/socket.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/ext.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/utils.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/mod.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/sys/unix/impls.rs:
+/Users/y-tsuzaki/.cargo/registry/src/github.com-1ecc6299db9ec823/net2-0.2.33/src/unix.rs:
